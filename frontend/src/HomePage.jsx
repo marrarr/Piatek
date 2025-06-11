@@ -14,6 +14,7 @@ function HomePage() {
           throw new Error('Nie udało się pobrać listy gier');
         }
         const data = await response.json();
+        console.log('pobrane gry:', data);
         setGames(data);
       } catch (err) {
         setError(err.message);
@@ -39,7 +40,7 @@ function HomePage() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {games.map(game => (
           <GameCard
-            key={game.id}
+            //key={game.id}
             id={game.id}
             title={game.title}
             image={game.image}
