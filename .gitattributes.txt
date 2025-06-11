@@ -1,0 +1,31 @@
+# Java (Spring Boot)
+*.java       text eol=lf
+*.xml        text eol=lf
+*.properties text eol=lf
+*.yml        text eol=lf
+
+# JavaScript / React (frontend)
+*.js         text eol=lf
+*.jsx        text eol=lf
+*.json       text eol=lf
+*.html       text eol=lf
+*.css        text eol=lf
+
+# Markdown, tekst
+*.md         text eol=lf
+*.txt        text eol=lf
+
+# Windowsowe skrypty (np. .bat do buildów)
+*.bat        text eol=crlf
+*.cmd        text eol=crlf
+
+# Binarne pliki – nie ruszaj końców linii
+*.jar        binary
+*.png        binary
+*.jpg        binary
+*.jpeg       binary
+*.gif        binary
+*.ico        binary
+
+# Domyślne ustawienie
+*            text=auto

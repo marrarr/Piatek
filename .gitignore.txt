@@ -1,0 +1,39 @@
+# === Java / Spring / IntelliJ ===
+/backend/target/
+/backend/.idea/
+/backend/.classpath
+/backend/.project
+/backend/.settings/
+/backend/*.iml
+
+# === Node / React ===
+/frontend/node_modules/
+/frontend/build/
+/frontend/.env
+/frontend/.DS_Store
+/frontend/.idea/
+/frontend/.vscode/
+
+# === PostgreSQL 
+data/
+data\
+/data/
+/data/*
+
+# === Docker ===
+*.log
+*.pid
+*.env
+docker-compose.override.yml
+
+# === Globalne ===
+*.log
+*.tmp
+*.swp
+*.swo
+*.bak
+.DS_Store
+Thumbs.db
+
+# === Git ===
+.gitignore
