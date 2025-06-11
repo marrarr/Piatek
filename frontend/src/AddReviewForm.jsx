@@ -1,82 +1,87 @@
+// src/AddReviewForm.jsx
 import React, { useState } from 'react';
+import axios from 'axios';
 
 function AddReviewForm({ gameId, user, onReviewAdded }) {
+  // --- lokalny stan formularza ---
   const [rating, setRating] = useState(1);
   const [reviewText, setReviewText] = useState('');
-  const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
+  // --- walidacja pomocnicza ---
+  const validate = () => {
+    //if (!user?.id) return 'Musisz być zalogowany, aby dodać recenzję.';
+    if (rating < 1 || rating > 10) return 'Ocena musi być od 1 do 10.';
+    if (!reviewText.trim()) return 'Treść recenzji nie może być pusta.';
+    if (reviewText.length > 2000) return 'Recenzja może mieć maksymalnie 2000 znaków.';
+    return null;
+  };
+
+  // --- wysyłka formularza ---
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Prosta walidacja
-    if (rating < 1 || rating > 10) {
-      setError('Ocena musi być od 1 do 10.');
-      return;
-    }
-    if (reviewText.trim() === '') {
-      setError('Treść recenzji nie może być pusta.');
-      return;
-    }
-    if (reviewText.length > 2000) {
-      setError('Recenzja może mieć maksymalnie 2000 znaków.');
+    const validationError = validate();
+    if (validationError) {
+      setError(validationError);
       return;
     }
 
-    setError(null);
     setLoading(true);
+    setError(null);
 
     try {
-      // Przykład wysyłki do API (dopasuj URL i dane do swojego backendu)
-      const response = await fetch('http://localhost:8080/api/reviews', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          // jeśli używasz tokena autoryzacji to dodaj go w nagłówku
-          //'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify({
+      const { data: newReview } = await axios.post(
+        'http://localhost:8080/api/reviews',
+        {
+          //userId: user.id,
+          userId: "2",
           gameId,
-          userId: user.id,
           rating,
           reviewText,
-        }),
-      });
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            // Jeżeli używasz JWT/cookie, podaj auth header
+            // Authorization: `Bearer ${token}`,
+          },
+        },
+      );
 
-      if (!response.ok) {
-        throw new Error('Błąd przy dodawaniu recenzji');
-      }
-
-      const newReview = await response.json();
-
-      // Reset formularza
+      // wyczyść formularz
       setRating(1);
       setReviewText('');
 
-      // Wywołanie callbacka, np. do odświeżenia listy recenzji
-      if (onReviewAdded) onReviewAdded(newReview);
-
+      // odśwież listę recenzji w GamePage (lub gdziekolwiek wywołasz)
+      onReviewAdded?.(newReview);
     } catch (err) {
-      setError(err.message);
+      if (err.response?.data?.message) {
+        setError(err.response.data.message);
+      } else {
+        setError(err.message || 'Nie udało się dodać recenzji.');
+      }
     } finally {
       setLoading(false);
     }
   };
 
+  // --- render ---
   return (
     <form onSubmit={handleSubmit} className="max-w-md mx-auto bg-white p-6 rounded shadow">
-      <h3 className="text-xl font-bold mb-4">Dodaj recenzję</h3>
+      <h2 className="text-xl font-bold mb-4">Dodaj recenzję</h2>
 
-      {error && <p className="text-red-600 mb-4">{error}</p>}
+      {error && <p className="text-red-600 mb-4 break-words">{error}</p>}
 
-      <label className="block mb-2 font-semibold">
-        Ocena (1-10):
+      <label className="block mb-3 font-semibold">
+        Ocena (1–10):
         <input
           type="number"
           min="1"
           max="10"
+          step="1"
           value={rating}
-          onChange={(e) => setRating(parseInt(e.target.value))}
+          onChange={(e) => setRating(Number(e.target.value))}
           className="w-full border border-gray-300 rounded px-3 py-2 mt-1"
           required
         />
@@ -97,9 +102,9 @@ function AddReviewForm({ gameId, user, onReviewAdded }) {
       <button
         type="submit"
         disabled={loading}
-        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50"
+        className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded disabled:opacity-50"
       >
-        {loading ? 'Dodawanie...' : 'Dodaj recenzję'}
+        {loading ? 'Dodawanie…' : 'Dodaj recenzję'}
       </button>
     </form>
   );

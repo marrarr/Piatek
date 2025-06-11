@@ -8,30 +8,33 @@ function Logowanie({ onLoginSuccess }) {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const zaloguj = () => {
-    setLoading(true);
-    axios.get('http://localhost:8080/api/auth/login', {
-      auth: {
-        username: formUsername,
-        password: formPassword,
-      },
-    })
-    .then((response) => {
-      setLoading(false);
-      if (onLoginSuccess) {
-        onLoginSuccess({ username: formUsername, ...response.data });
-      }
-      navigate('/'); // przekierowanie na stronę główną
-    })
-    .catch(() => {
-      setLoading(false);
-      alert('Niepoprawny login lub hasło');
-    });
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    zaloguj();
+    setLoading(true);
+
+    try {
+      const response = await axios.get('http://localhost:8080/api/auth/login', {
+        auth: {
+          username: formUsername,
+          password: formPassword,
+        },
+      });
+
+      const userData = {
+        ...response.data,
+        username: formUsername, // zakładamy, że login nie przychodzi w response
+      };
+
+      localStorage.setItem('user', JSON.stringify(userData));
+      onLoginSuccess(userData);
+      navigate('/', { replace: true });
+
+    } catch (error) {
+      console.error('Błąd logowania:', error);
+      alert('Niepoprawny login lub hasło');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
