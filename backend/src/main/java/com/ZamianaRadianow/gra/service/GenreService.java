@@ -1,6 +1,7 @@
 package com.ZamianaRadianow.gra.service;
 
 import com.ZamianaRadianow.gra.dto.GenreRequestDTO;
+import com.ZamianaRadianow.gra.dto.GenreResponseDTO;
 import com.ZamianaRadianow.gra.model.Genre;
 import com.ZamianaRadianow.gra.repository.GameRepository;
 import com.ZamianaRadianow.gra.repository.GenreRepository;
@@ -48,11 +49,23 @@ public class GenreService {
         genreRepository.deleteById(id);
     }
 
-    private Genre mapToEntity(GenreRequestDTO dto) {
+    public Genre mapToEntity(GenreRequestDTO dto) {
         Genre genre = new Genre();
         genre.setName(dto.getName());
 
         return genre;
+    }
+
+    public GenreResponseDTO mapToDTO(Genre genre) {
+        GenreResponseDTO dto = new GenreResponseDTO();
+        dto.setId(genre.getId());
+        dto.setName(genre.getName());
+
+        return dto;
+    }
+
+    public List<GenreResponseDTO> mapToDTO(List<Genre> genres) {
+        return genres.stream().map(this::mapToDTO).toList();
     }
 }
 

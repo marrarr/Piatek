@@ -37,12 +37,8 @@ public class GameController {
 
     @GetMapping
     public ResponseEntity<List<GameResponseListDTO>> getAllGames() {
-        List<GameResponseListDTO> dtoList = new ArrayList<>();
-        for (Game g : gameService.getAll()) {
-            dtoList.add(gameService.mapToListDTO(g));
-        }
-
-        return ResponseEntity.ok(dtoList);
+        List<Game> games = gameService.getAll();
+        return ResponseEntity.ok(gameService.mapToListDTO(games));
     }
 
     @PutMapping("/{id}")

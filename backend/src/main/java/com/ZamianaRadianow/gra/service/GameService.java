@@ -97,5 +97,8 @@ public class GameService {
 
         return dto;
     }
-}
 
+    public List<GameResponseListDTO> mapToListDTO(List<Game> games) {
+        return games.stream().map(this::mapToListDTO).toList();
+    }
+}

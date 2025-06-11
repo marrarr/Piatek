@@ -45,11 +45,8 @@ public class ReviewController {
 
     @GetMapping("/game/{id}")
     public ResponseEntity<List<ReviewResponseDTO>> getAllReviewsForGame(@PathVariable Long id) {
-        List<ReviewResponseDTO> dtoList = new ArrayList<>();
-        for (Review r : reviewRepository.findAllByGameId(id)) {
-            dtoList.add(reviewService.mapToDTO(r));
-        }
-        return ResponseEntity.ok(dtoList);
+        List<Review> reviews = reviewService.getAllByGameId(id);
+        return ResponseEntity.ok(reviewService.mapToDTO(reviews));
     }
 
 

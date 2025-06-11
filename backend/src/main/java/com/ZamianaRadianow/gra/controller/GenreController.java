@@ -1,6 +1,7 @@
 package com.ZamianaRadianow.gra.controller;
 
 import com.ZamianaRadianow.gra.dto.GenreRequestDTO;
+import com.ZamianaRadianow.gra.dto.GenreResponseDTO;
 import com.ZamianaRadianow.gra.model.Genre;
 import com.ZamianaRadianow.gra.service.GenreService;
 import jakarta.validation.Valid;
@@ -21,23 +22,27 @@ public class GenreController {
     }
 
     @PostMapping
-    public ResponseEntity<Genre> createGenre(@Valid @RequestBody GenreRequestDTO dto) {
-        return new ResponseEntity<>(genreService.create(dto), HttpStatus.CREATED);
+    public ResponseEntity<GenreResponseDTO> createGenre(@Valid @RequestBody GenreRequestDTO dto) {
+        Genre genre = genreService.create(dto);
+        return new ResponseEntity<>(genreService.mapToDTO(genre), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Genre> getGenre(@PathVariable Long id) {
-        return ResponseEntity.ok(genreService.getById(id));
+    public ResponseEntity<GenreResponseDTO> getGenre(@PathVariable Long id) {
+        Genre genre = genreService.getById(id);
+        return ResponseEntity.ok(genreService.mapToDTO(genre));
     }
 
     @GetMapping
-    public ResponseEntity<List<Genre>> getAllGenres() {
-        return ResponseEntity.ok(genreService.getAll());
+    public ResponseEntity<List<GenreResponseDTO>> getAllGenres() {
+        List<Genre> genres = genreService.getAll();
+        return ResponseEntity.ok(genreService.mapToDTO(genres));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Genre> updateGenre(@PathVariable Long id, @Valid @RequestBody GenreRequestDTO dto) {
-        return ResponseEntity.ok(genreService.update(id, dto));
+    public ResponseEntity<GenreResponseDTO> updateGenre(@PathVariable Long id, @Valid @RequestBody GenreRequestDTO dto) {
+        Genre genre = genreService.update(id, dto);
+        return ResponseEntity.ok(genreService.mapToDTO(genre));
     }
 
     @DeleteMapping("/{id}")

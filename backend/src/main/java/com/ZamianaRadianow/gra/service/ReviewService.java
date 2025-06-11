@@ -11,6 +11,7 @@ import com.ZamianaRadianow.security.user.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @Service
@@ -35,6 +36,7 @@ public class ReviewService {
 
     public Review create(ReviewRequestDTO dto) {
         Review review = mapToEntity(dto);
+        review.setCreatedAt(new Timestamp(System.currentTimeMillis()));
         return reviewRepository.save(review);
     }
 
@@ -45,6 +47,10 @@ public class ReviewService {
 
     public List<Review> getAll() {
         return reviewRepository.findAll();
+    }
+
+    public List<Review> getAllByGameId(Long id) {
+        return reviewRepository.findAllByGameId(id);
     }
 
     public Review update(Long id, ReviewRequestDTO dto) {
@@ -77,6 +83,10 @@ public class ReviewService {
         dto.setReviewText(review.getReviewText());
 
         return dto;
+    }
+
+    public List<ReviewResponseDTO> mapToDTO(List<Review> reviews) {
+        return reviews.stream().map(this::mapToDTO).toList();
     }
 }
 
