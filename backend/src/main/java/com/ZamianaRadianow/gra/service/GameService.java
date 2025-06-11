@@ -1,6 +1,6 @@
 package com.ZamianaRadianow.gra.service;
 
-import com.ZamianaRadianow.dto.GameDTO;
+import com.ZamianaRadianow.dto.GameRequestDTO;
 import com.ZamianaRadianow.gra.model.Game;
 import com.ZamianaRadianow.gra.repository.GameRepository;
 import com.ZamianaRadianow.gra.repository.GenreRepository;
@@ -24,7 +24,7 @@ public class GameService {
         this.platformRepository = platformRepository;
     }
 
-    public Game create(GameDTO dto) {
+    public Game create(GameRequestDTO dto) {
         Game game = mapToEntity(dto);
         return gameRepository.save(game);
     }
@@ -38,7 +38,7 @@ public class GameService {
         return gameRepository.findAll();
     }
 
-    public Game update(Long id, GameDTO dto) {
+    public Game update(Long id, GameRequestDTO dto) {
         Game game = getById(id);
         Game updated = mapToEntity(dto);
         updated.setId(id);
@@ -49,7 +49,7 @@ public class GameService {
         gameRepository.deleteById(id);
     }
 
-    private Game mapToEntity(GameDTO dto) {
+    private Game mapToEntity(GameRequestDTO dto) {
         Game game = new Game();
         game.setTitle(dto.getTitle());
         game.setReleaseDate(dto.getReleaseDate());

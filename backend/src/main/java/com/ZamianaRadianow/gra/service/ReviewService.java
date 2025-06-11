@@ -1,6 +1,6 @@
 package com.ZamianaRadianow.gra.service;
 
-import com.ZamianaRadianow.dto.ReviewDTO;
+import com.ZamianaRadianow.dto.ReviewRequestDTO;
 import com.ZamianaRadianow.gra.model.Review;
 import com.ZamianaRadianow.gra.repository.GameRepository;
 import com.ZamianaRadianow.gra.repository.GenreRepository;
@@ -32,7 +32,7 @@ public class ReviewService {
         this.userRepository = userRepository;
     }
 
-    public Review create(ReviewDTO dto) {
+    public Review create(ReviewRequestDTO dto) {
         Review review = mapToEntity(dto);
         return reviewRepository.save(review);
     }
@@ -46,7 +46,7 @@ public class ReviewService {
         return reviewRepository.findAll();
     }
 
-    public Review update(Long id, ReviewDTO dto) {
+    public Review update(Long id, ReviewRequestDTO dto) {
         Review review = getById(id);
         Review updated = mapToEntity(dto);
         updated.setId(id);
@@ -57,7 +57,7 @@ public class ReviewService {
         reviewRepository.deleteById(id);
     }
 
-    private Review mapToEntity(ReviewDTO dto) {
+    private Review mapToEntity(ReviewRequestDTO dto) {
         Review review = new Review();
         review.setReviewText(dto.getReviewText());
         review.setRating(dto.getRating());

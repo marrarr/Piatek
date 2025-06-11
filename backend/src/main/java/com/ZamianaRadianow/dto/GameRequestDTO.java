@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Size;
 import java.sql.Timestamp;
 import java.util.Set;
 
-public class GameDTO {
+public class GameRequestDTO {
 
     @NotBlank
     @Size(max = 100)
@@ -27,7 +27,6 @@ public class GameDTO {
 
     private Set<Long> genreIds;
     private Set<Long> platformIds;
-
 
 
 

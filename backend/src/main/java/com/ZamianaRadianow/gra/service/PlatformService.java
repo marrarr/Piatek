@@ -1,6 +1,6 @@
 package com.ZamianaRadianow.gra.service;
 
-import com.ZamianaRadianow.dto.PlatformDTO;
+import com.ZamianaRadianow.dto.PlatformRequestDTO;
 import com.ZamianaRadianow.gra.model.Platform;
 import com.ZamianaRadianow.gra.repository.GameRepository;
 import com.ZamianaRadianow.gra.repository.GenreRepository;
@@ -23,7 +23,7 @@ public class PlatformService {
         this.platformRepository = platformRepository;
     }
 
-    public Platform create(PlatformDTO dto) {
+    public Platform create(PlatformRequestDTO dto) {
         Platform platform = mapToEntity(dto);
         return platformRepository.save(platform);
     }
@@ -37,7 +37,7 @@ public class PlatformService {
         return platformRepository.findAll();
     }
 
-    public Platform update(Long id, PlatformDTO dto) {
+    public Platform update(Long id, PlatformRequestDTO dto) {
         Platform platform = getById(id);
         Platform updated = mapToEntity(dto);
         updated.setId(id);
@@ -48,7 +48,7 @@ public class PlatformService {
         platformRepository.deleteById(id);
     }
 
-    private Platform mapToEntity(PlatformDTO dto) {
+    private Platform mapToEntity(PlatformRequestDTO dto) {
         Platform platform = new Platform();
         platform.setName(dto.getName());
 

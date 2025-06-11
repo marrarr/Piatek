@@ -1,6 +1,6 @@
 package com.ZamianaRadianow.dto;
 
-public class ReviewDTO {
+public class ReviewRequestDTO {
     private Long userId;
     private Long gameId;
     private Integer rating;

@@ -1,8 +1,6 @@
 package com.ZamianaRadianow.gra.controller;
 
-import com.ZamianaRadianow.dto.GameDTO;
-import com.ZamianaRadianow.dto.PlatformDTO;
-import com.ZamianaRadianow.gra.model.Game;
+import com.ZamianaRadianow.dto.PlatformRequestDTO;
 import com.ZamianaRadianow.gra.model.Platform;
 import com.ZamianaRadianow.gra.service.GameService;
 import com.ZamianaRadianow.gra.service.PlatformService;
@@ -26,7 +24,7 @@ public class PlatformController {
     }
 
     @PostMapping
-    public ResponseEntity<Platform> createPlatform(@Valid @RequestBody PlatformDTO dto) {
+    public ResponseEntity<Platform> createPlatform(@Valid @RequestBody PlatformRequestDTO dto) {
         return new ResponseEntity<>(platformService.create(dto), HttpStatus.CREATED);
     }
 
@@ -41,7 +39,7 @@ public class PlatformController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Platform> updatePlatform(@PathVariable Long id, @Valid @RequestBody PlatformDTO dto) {
+    public ResponseEntity<Platform> updatePlatform(@PathVariable Long id, @Valid @RequestBody PlatformRequestDTO dto) {
         return ResponseEntity.ok(platformService.update(id, dto));
     }
 

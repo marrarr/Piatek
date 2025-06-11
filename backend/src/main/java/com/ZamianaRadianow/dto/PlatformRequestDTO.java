@@ -1,6 +1,6 @@
 package com.ZamianaRadianow.dto;
 
-public class PlatformDTO {
+public class PlatformRequestDTO {
     private String name;
 
     public String getName() {

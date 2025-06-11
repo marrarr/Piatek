@@ -1,10 +1,7 @@
 package com.ZamianaRadianow.gra.controller;
 
-import com.ZamianaRadianow.dto.GameDTO;
-import com.ZamianaRadianow.dto.GenreDTO;
-import com.ZamianaRadianow.gra.model.Game;
+import com.ZamianaRadianow.dto.GenreRequestDTO;
 import com.ZamianaRadianow.gra.model.Genre;
-import com.ZamianaRadianow.gra.service.GameService;
 import com.ZamianaRadianow.gra.service.GenreService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -24,7 +21,7 @@ public class GenreController {
     }
 
     @PostMapping
-    public ResponseEntity<Genre> createGenre(@Valid @RequestBody GenreDTO dto) {
+    public ResponseEntity<Genre> createGenre(@Valid @RequestBody GenreRequestDTO dto) {
         return new ResponseEntity<>(genreService.create(dto), HttpStatus.CREATED);
     }
 
@@ -39,7 +36,7 @@ public class GenreController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Genre> updateGenre(@PathVariable Long id, @Valid @RequestBody GenreDTO dto) {
+    public ResponseEntity<Genre> updateGenre(@PathVariable Long id, @Valid @RequestBody GenreRequestDTO dto) {
         return ResponseEntity.ok(genreService.update(id, dto));
     }
 

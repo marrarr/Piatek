@@ -1,6 +1,6 @@
 package com.ZamianaRadianow.gra.controller;
 
-import com.ZamianaRadianow.dto.GameDTO;
+import com.ZamianaRadianow.dto.GameRequestDTO;
 import com.ZamianaRadianow.gra.model.Game;
 import com.ZamianaRadianow.gra.service.GameService;
 import jakarta.validation.Valid;
@@ -21,7 +21,7 @@ public class GameController {
     }
 
     @PostMapping
-    public ResponseEntity<Game> createGame(@Valid @RequestBody GameDTO dto) {
+    public ResponseEntity<Game> createGame(@Valid @RequestBody GameRequestDTO dto) {
         return new ResponseEntity<>(gameService.create(dto), HttpStatus.CREATED);
     }
 
@@ -36,7 +36,7 @@ public class GameController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Game> updateGame(@PathVariable Long id, @Valid @RequestBody GameDTO dto) {
+    public ResponseEntity<Game> updateGame(@PathVariable Long id, @Valid @RequestBody GameRequestDTO dto) {
         return ResponseEntity.ok(gameService.update(id, dto));
     }
 

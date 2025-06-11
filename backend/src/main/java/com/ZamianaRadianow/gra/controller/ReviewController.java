@@ -1,6 +1,6 @@
 package com.ZamianaRadianow.gra.controller;
 
-import com.ZamianaRadianow.dto.ReviewDTO;
+import com.ZamianaRadianow.dto.ReviewRequestDTO;
 import com.ZamianaRadianow.gra.model.Review;
 import com.ZamianaRadianow.gra.service.ReviewService;
 import jakarta.validation.Valid;
@@ -22,7 +22,7 @@ public class ReviewController {
 
 
     @PostMapping
-    public ResponseEntity<Review> createReview(@Valid @RequestBody ReviewDTO dto) {
+    public ResponseEntity<Review> createReview(@Valid @RequestBody ReviewRequestDTO dto) {
         return new ResponseEntity<>(reviewService.create(dto), HttpStatus.CREATED);
     }
 
@@ -37,7 +37,7 @@ public class ReviewController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Review> updateReview(@PathVariable Long id, @Valid @RequestBody ReviewDTO dto) {
+    public ResponseEntity<Review> updateReview(@PathVariable Long id, @Valid @RequestBody ReviewRequestDTO dto) {
         return ResponseEntity.ok(reviewService.update(id, dto));
     }
 
