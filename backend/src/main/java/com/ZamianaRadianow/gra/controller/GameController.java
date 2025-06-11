@@ -24,8 +24,9 @@ public class GameController {
     }
 
     @PostMapping
-    public ResponseEntity<Game> createGame(@Valid @RequestBody GameRequestDTO dto) {
-        return new ResponseEntity<>(gameService.create(dto), HttpStatus.CREATED);
+    public ResponseEntity<GameResponseDetailsDTO> createGame(@Valid @RequestBody GameRequestDTO dto) {
+        Game game = gameService.create(dto);
+        return new ResponseEntity<>(gameService.mapToDetailsDTO(game), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
@@ -45,8 +46,9 @@ public class GameController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Game> updateGame(@PathVariable Long id, @Valid @RequestBody GameRequestDTO dto) {
-        return ResponseEntity.ok(gameService.update(id, dto));
+    public ResponseEntity<GameResponseDetailsDTO> updateGame(@PathVariable Long id, @Valid @RequestBody GameRequestDTO dto) {
+        Game game = gameService.update(id, dto);
+        return ResponseEntity.ok(gameService.mapToDetailsDTO(game));
     }
 
     @DeleteMapping("/{id}")
@@ -55,4 +57,3 @@ public class GameController {
         return ResponseEntity.noContent().build();
     }
 }
-
