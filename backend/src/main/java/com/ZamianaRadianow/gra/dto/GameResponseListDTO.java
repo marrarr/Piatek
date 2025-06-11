@@ -4,6 +4,15 @@ import java.sql.Timestamp;
 import java.util.Set;
 
 public class GameResponseListDTO {
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    private Long id;
     private String title;
     private double averageRating;
 
