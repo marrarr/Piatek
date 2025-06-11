@@ -1,6 +1,6 @@
 package com.ZamianaRadianow.gra.controller;
 
-import com.ZamianaRadianow.dto.ReviewRequestDTO;
+import com.ZamianaRadianow.gra.dto.ReviewRequestDTO;
 import com.ZamianaRadianow.gra.model.Review;
 import com.ZamianaRadianow.gra.service.ReviewService;
 import jakarta.validation.Valid;

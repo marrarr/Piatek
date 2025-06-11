@@ -1,6 +1,6 @@
 package com.ZamianaRadianow.gra.controller;
 
-import com.ZamianaRadianow.dto.GenreRequestDTO;
+import com.ZamianaRadianow.gra.dto.GenreRequestDTO;
 import com.ZamianaRadianow.gra.model.Genre;
 import com.ZamianaRadianow.gra.service.GenreService;
 import jakarta.validation.Valid;

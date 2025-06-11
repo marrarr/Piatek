@@ -1,32 +1,21 @@
-package com.ZamianaRadianow.dto;
-
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+package com.ZamianaRadianow.gra.dto;
 
 import java.sql.Timestamp;
 import java.util.Set;
 
-public class GameRequestDTO {
+public class GameResponseDetailsDTO {
 
-    @NotBlank
-    @Size(max = 100)
+    private Long id;
     private String title;
 
+
+    private double averageRating;
     private Timestamp releaseDate;
-
-    @NotBlank
-    @Size(max = 100)
     private String developer;
-
-    @NotBlank
-    @Size(max = 100)
     private String publisher;
-
-    @Size(max = 1000)
     private String description;
-
-    private Set<Long> genreIds;
-    private Set<Long> platformIds;
+    private Set<GenreResponseDTO> genres;
+    private Set<PlatformResponseDTO> platforms;
 
 
 
@@ -71,19 +60,40 @@ public class GameRequestDTO {
         this.description = description;
     }
 
-    public Set<Long> getGenreIds() {
-        return genreIds;
+    public Long getId() {
+        return id;
     }
 
-    public void setGenreIds(Set<Long> genreIds) {
-        this.genreIds = genreIds;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public Set<Long> getPlatformIds() {
-        return platformIds;
+    public Set<GenreResponseDTO> getGenres() {
+        return genres;
+
     }
 
-    public void setPlatformIds(Set<Long> platformIds) {
-        this.platformIds = platformIds;
+    public void setGenres(Set<GenreResponseDTO> genres) {
+        this.genres = genres;
     }
+
+    public Set<PlatformResponseDTO> getPlatforms() {
+        return platforms;
+    }
+
+    public void setPlatforms(Set<PlatformResponseDTO> platforms) {
+        this.platforms = platforms;
+    }
+
+
+    public double getAverageRating() {
+        return averageRating;
+    }
+
+    public void setAverageRating(double averageRating) {
+        this.averageRating = averageRating;
+    }
+
 }
+
+

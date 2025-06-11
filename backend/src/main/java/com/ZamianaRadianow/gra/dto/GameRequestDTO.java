@@ -1,20 +1,30 @@
-package com.ZamianaRadianow.dto;
+package com.ZamianaRadianow.gra.dto;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.sql.Timestamp;
 import java.util.Set;
 
-public class GameResponseDTO {
+public class GameRequestDTO {
 
-    private Long id;
+    @NotBlank
+    @Size(max = 100)
     private String title;
+
     private Timestamp releaseDate;
+
+    @NotBlank
+    @Size(max = 100)
     private String developer;
+
+    @NotBlank
+    @Size(max = 100)
     private String publisher;
+
+    @Size(max = 1000)
     private String description;
+
     private Set<Long> genreIds;
     private Set<Long> platformIds;
 
@@ -75,13 +85,5 @@ public class GameResponseDTO {
 
     public void setPlatformIds(Set<Long> platformIds) {
         this.platformIds = platformIds;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 }

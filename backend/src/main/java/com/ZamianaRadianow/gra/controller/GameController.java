@@ -1,6 +1,7 @@
 package com.ZamianaRadianow.gra.controller;
 
-import com.ZamianaRadianow.dto.GameRequestDTO;
+import com.ZamianaRadianow.gra.dto.GameRequestDTO;
+import com.ZamianaRadianow.gra.dto.GameResponseListDTO;
 import com.ZamianaRadianow.gra.model.Game;
 import com.ZamianaRadianow.gra.service.GameService;
 import jakarta.validation.Valid;
@@ -8,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -31,10 +33,15 @@ public class GameController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Game>> getAllGames() {
-        return ResponseEntity.ok(gameService.getAll());
-    }
+    public ResponseEntity<List<GameResponseListDTO>> getAllGames() {
+        List<GameResponseListDTO> dtoList = new ArrayList<>();
+        for (Game g : gameService.getAll()) {
+            dtoList.add(gameService.mapToListDTO(g));
+        }
 
+        return ResponseEntity.ok(dtoList);
+    }
+    
     @PutMapping("/{id}")
     public ResponseEntity<Game> updateGame(@PathVariable Long id, @Valid @RequestBody GameRequestDTO dto) {
         return ResponseEntity.ok(gameService.update(id, dto));

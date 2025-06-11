@@ -1,10 +1,13 @@
 package com.ZamianaRadianow.gra.service;
 
-import com.ZamianaRadianow.dto.GameRequestDTO;
+import com.ZamianaRadianow.gra.dto.GameRequestDTO;
+import com.ZamianaRadianow.gra.dto.GameResponseDetailsDTO;
+import com.ZamianaRadianow.gra.dto.GameResponseListDTO;
 import com.ZamianaRadianow.gra.model.Game;
 import com.ZamianaRadianow.gra.repository.GameRepository;
 import com.ZamianaRadianow.gra.repository.GenreRepository;
 import com.ZamianaRadianow.gra.repository.PlatformRepository;
+import com.ZamianaRadianow.gra.repository.ReviewRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -17,11 +20,13 @@ public class GameService {
     private final GameRepository gameRepository;
     private final GenreRepository genreRepository;
     private final PlatformRepository platformRepository;
+    private final ReviewRepository reviewRepository;
 
-    public GameService(GameRepository gameRepository, GenreRepository genreRepository, PlatformRepository platformRepository) {
+    public GameService(GameRepository gameRepository, GenreRepository genreRepository, PlatformRepository platformRepository, ReviewRepository reviewRepository) {
         this.gameRepository = gameRepository;
         this.genreRepository = genreRepository;
         this.platformRepository = platformRepository;
+        this.reviewRepository = reviewRepository;
     }
 
     public Game create(GameRequestDTO dto) {
@@ -49,7 +54,7 @@ public class GameService {
         gameRepository.deleteById(id);
     }
 
-    private Game mapToEntity(GameRequestDTO dto) {
+    public Game mapToEntity(GameRequestDTO dto) {
         Game game = new Game();
         game.setTitle(dto.getTitle());
         game.setReleaseDate(dto.getReleaseDate());
@@ -66,6 +71,30 @@ public class GameService {
         }
 
         return game;
+    }
+
+    public GameResponseDetailsDTO mapToDetailsDTO(Game game) {
+        double rating = reviewRepository.findAverageRatingByGameId(game.getId());
+        GameResponseDetailsDTO dto = new GameResponseDetailsDTO();
+        dto.setId(game.getId());
+        dto.setTitle(game.getTitle());
+        dto.setAverageRating(rating);
+        dto.setDescription(game.getDescription());
+        dto.setReleaseDate(game.getReleaseDate());
+        dto.setDeveloper(game.getDeveloper());
+        dto.setPublisher(game.getPublisher());
+        dto.setDescription(game.getDescription());
+
+        return dto;
+    }
+
+    public GameResponseListDTO mapToListDTO(Game game) {
+        double rating = reviewRepository.findAverageRatingByGameId(game.getId());
+        GameResponseListDTO dto = new GameResponseListDTO();
+        dto.setTitle(game.getTitle());
+        dto.setAverageRating(rating);
+
+        return dto;
     }
 }
 

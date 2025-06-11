@@ -1,4 +1,4 @@
-package com.ZamianaRadianow.dto;
+package com.ZamianaRadianow.gra.dto;
 
 public class ReviewRequestDTO {
     private Long userId;

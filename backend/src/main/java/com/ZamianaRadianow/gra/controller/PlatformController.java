@@ -1,6 +1,6 @@
 package com.ZamianaRadianow.gra.controller;
 
-import com.ZamianaRadianow.dto.PlatformRequestDTO;
+import com.ZamianaRadianow.gra.dto.PlatformRequestDTO;
 import com.ZamianaRadianow.gra.model.Platform;
 import com.ZamianaRadianow.gra.service.GameService;
 import com.ZamianaRadianow.gra.service.PlatformService;

@@ -1,7 +1,8 @@
-package com.ZamianaRadianow.dto;
+package com.ZamianaRadianow.gra.dto;
 
-public class PlatformRequestDTO {
+public class GenreRequestDTO {
     private String name;
+
 
     public String getName() {
         return name;

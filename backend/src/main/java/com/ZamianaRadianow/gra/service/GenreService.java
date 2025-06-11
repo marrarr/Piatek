@@ -1,6 +1,6 @@
 package com.ZamianaRadianow.gra.service;
 
-import com.ZamianaRadianow.dto.GenreRequestDTO;
+import com.ZamianaRadianow.gra.dto.GenreRequestDTO;
 import com.ZamianaRadianow.gra.model.Genre;
 import com.ZamianaRadianow.gra.repository.GameRepository;
 import com.ZamianaRadianow.gra.repository.GenreRepository;
