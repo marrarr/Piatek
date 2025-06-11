@@ -91,6 +91,7 @@ public class GameService {
     public GameResponseListDTO mapToListDTO(Game game) {
         double rating = reviewRepository.findAverageRatingByGameId(game.getId());
         GameResponseListDTO dto = new GameResponseListDTO();
+        dto.setId(game.getId());
         dto.setTitle(game.getTitle());
         dto.setAverageRating(rating);
 
