@@ -43,7 +43,7 @@ function HomePage() {
             id={game.id}
             title={game.title}
             image={game.image}
-            rating={game.rating}
+            rating={game.averageRating}
           />
         ))}
       </div>
