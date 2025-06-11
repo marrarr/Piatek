@@ -10,6 +10,7 @@ import com.ZamianaRadianow.gra.repository.ReviewRepository;
 import com.ZamianaRadianow.security.user.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
+import java.sql.Timestamp;
 
 import java.util.List;
 
@@ -35,6 +36,7 @@ public class ReviewService {
 
     public Review create(ReviewRequestDTO dto) {
         Review review = mapToEntity(dto);
+        review.setCreatedAt(new Timestamp(System.currentTimeMillis()));
         return reviewRepository.save(review);
     }
 
