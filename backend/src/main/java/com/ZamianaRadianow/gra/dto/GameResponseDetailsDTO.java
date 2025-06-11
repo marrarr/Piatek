@@ -17,6 +17,15 @@ public class GameResponseDetailsDTO {
     private Set<GenreResponseDTO> genres;
     private Set<PlatformResponseDTO> platforms;
 
+    private ImageResponseDTO image = null;
+
+    public ImageResponseDTO getImage() {
+        return image;
+    }
+
+    public void setImage(ImageResponseDTO image) {
+        this.image = image;
+    }
 
 
 

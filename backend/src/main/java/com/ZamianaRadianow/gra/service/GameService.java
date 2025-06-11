@@ -3,6 +3,7 @@ package com.ZamianaRadianow.gra.service;
 import com.ZamianaRadianow.gra.dto.GameRequestDTO;
 import com.ZamianaRadianow.gra.dto.GameResponseDetailsDTO;
 import com.ZamianaRadianow.gra.dto.GameResponseListDTO;
+import com.ZamianaRadianow.gra.dto.ImageResponseDTO;
 import com.ZamianaRadianow.gra.model.Game;
 import com.ZamianaRadianow.gra.repository.GameRepository;
 import com.ZamianaRadianow.gra.repository.GenreRepository;
@@ -84,7 +85,16 @@ public class GameService {
         dto.setDeveloper(game.getDeveloper());
         dto.setPublisher(game.getPublisher());
         dto.setDescription(game.getDescription());
-        
+
+        if (game.getImage() != null) {
+            ImageResponseDTO imageDto = new ImageResponseDTO();
+            imageDto.setId(game.getImage().getId());
+            imageDto.setContentType(game.getImage().getContentType());
+            imageDto.setData(game.getImage().getData());
+            dto.setImage(imageDto);
+        }
+
+
         return dto;
     }
 
@@ -94,6 +104,15 @@ public class GameService {
         dto.setId(game.getId());
         dto.setTitle(game.getTitle());
         dto.setAverageRating(rating);
+
+        if (game.getImage() != null) {
+            ImageResponseDTO imageDto = new ImageResponseDTO();
+            imageDto.setId(game.getImage().getId());
+            imageDto.setContentType(game.getImage().getContentType());
+            imageDto.setData(game.getImage().getData());
+            dto.setImage(imageDto);
+        }
+
 
         return dto;
     }

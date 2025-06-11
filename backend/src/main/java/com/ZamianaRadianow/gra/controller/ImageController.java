@@ -1,6 +1,5 @@
 package com.ZamianaRadianow.gra.controller;
 
-
 import com.ZamianaRadianow.gra.dto.ImageResponseDTO;
 import com.ZamianaRadianow.gra.service.ImageService;
 import org.springframework.http.HttpHeaders;

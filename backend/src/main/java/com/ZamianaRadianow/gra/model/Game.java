@@ -54,10 +54,19 @@ public class Game {
     )
     private Set<Platform> platforms = new HashSet<>();
 
+    @OneToOne(mappedBy = "game", cascade = CascadeType.ALL)
+    private Image image;
 
 
 
 
+    public Image getImage() {
+        return image;
+    }
+
+    public void setImage(Image image) {
+        this.image = image;
+    }
 
 
 

@@ -21,8 +21,8 @@ public class Image {
     @Column(name = "content_type", nullable = false)
     private String contentType;
 
-    @ManyToOne
-    @JoinColumn(name = "game_id", nullable = false)
+    @OneToOne
+    @JoinColumn(name = "game_id", nullable = false, unique = true)
     private Game game;
 
     public Long getId() {

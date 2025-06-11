@@ -16,6 +16,15 @@ public class GameResponseListDTO {
     private String title;
     private double averageRating;
 
+    private ImageResponseDTO image = null;
+
+    public ImageResponseDTO getImage() {
+        return image;
+    }
+
+    public void setImage(ImageResponseDTO image) {
+        this.image = image;
+    }
 
     public String getTitle() {
         return title;
