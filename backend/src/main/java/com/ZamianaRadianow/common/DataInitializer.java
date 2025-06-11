@@ -1,10 +1,7 @@
 package com.ZamianaRadianow.common;
 
 import com.ZamianaRadianow.gra.model.*;
-import com.ZamianaRadianow.gra.repository.GameRepository;
-import com.ZamianaRadianow.gra.repository.GenreRepository;
-import com.ZamianaRadianow.gra.repository.PlatformRepository;
-import com.ZamianaRadianow.gra.repository.ReviewRepository;
+import com.ZamianaRadianow.gra.repository.*;
 import com.ZamianaRadianow.security.user.DBUser;
 import com.ZamianaRadianow.security.rola.DBRole;
 import com.ZamianaRadianow.security.rola.RoleRepository;
@@ -15,9 +12,12 @@ import com.ZamianaRadianow.zamiana.ZamianaRepository;
 import com.ZamianaRadianow.zamiana.ZamianaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -42,6 +42,8 @@ public class DataInitializer implements CommandLineRunner {
     private GameRepository gameRepository;
     @Autowired
     private ReviewRepository reviewRepository;
+    @Autowired
+    private ImageRepository imageRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -112,6 +114,8 @@ public class DataInitializer implements CommandLineRunner {
             eldenRing.setGenres(Set.of(action, rpg));
             eldenRing.setPlatforms(Set.of(pc, ps5, xbox));
             gameRepository.save(eldenRing);
+            addImageToGame(eldenRing, "static/images/zdjecie.jpg", "image/jpeg");
+
 
             Game cyberpunk = new Game();
             cyberpunk.setTitle("Cyberpunk 2077");
@@ -122,6 +126,7 @@ public class DataInitializer implements CommandLineRunner {
             cyberpunk.setGenres(Set.of(action, rpg));
             cyberpunk.setPlatforms(Set.of(pc, ps5, xbox));
             gameRepository.save(cyberpunk);
+            addImageToGame(cyberpunk, "static/images/eldenring.jpg", "image/jpeg");
 
             Game zelda = new Game();
             zelda.setTitle("The Legend of Zelda: Breath of the Wild");
@@ -132,6 +137,7 @@ public class DataInitializer implements CommandLineRunner {
             zelda.setGenres(Set.of(adventure, action));
             zelda.setPlatforms(Set.of(switchPlatform));
             gameRepository.save(zelda);
+            addImageToGame(zelda, "static/images/eldenring.jpg", "image/jpeg");
 
             // Tworzenie recenzji
             Review review1 = new Review();
@@ -170,5 +176,25 @@ public class DataInitializer implements CommandLineRunner {
             System.out.println("Initial data loaded successfully!");
             System.out.println("=========================");
         }
+
+
     }
+
+    private void addImageToGame(Game game, String path, String contentType) {
+        try {
+            ClassPathResource imgFile = new ClassPathResource(path);
+            byte[] imageData = Files.readAllBytes(imgFile.getFile().toPath());
+
+            Image image = new Image();
+            image.setData(imageData);
+            image.setContentType(contentType);
+            image.setGame(game);
+
+            imageRepository.save(image);
+        } catch (IOException e) {
+            System.err.println("Nie udało się załadować zdjęcia: " + path);
+            e.printStackTrace();
+        }
+    }
+
 }

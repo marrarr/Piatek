@@ -1,6 +1,5 @@
 package com.ZamianaRadianow.gra.controller;
 
-package com.ZamianaRadianow.controller;
 
 import com.ZamianaRadianow.gra.dto.ImageResponseDTO;
 import com.ZamianaRadianow.gra.service.ImageService;
