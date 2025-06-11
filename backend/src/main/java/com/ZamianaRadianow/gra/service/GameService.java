@@ -84,7 +84,7 @@ public class GameService {
         dto.setDeveloper(game.getDeveloper());
         dto.setPublisher(game.getPublisher());
         dto.setDescription(game.getDescription());
-
+        
         return dto;
     }
 

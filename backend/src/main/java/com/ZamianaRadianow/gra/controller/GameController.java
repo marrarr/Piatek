@@ -1,6 +1,7 @@
 package com.ZamianaRadianow.gra.controller;
 
 import com.ZamianaRadianow.gra.dto.GameRequestDTO;
+import com.ZamianaRadianow.gra.dto.GameResponseDetailsDTO;
 import com.ZamianaRadianow.gra.dto.GameResponseListDTO;
 import com.ZamianaRadianow.gra.model.Game;
 import com.ZamianaRadianow.gra.service.GameService;
@@ -28,8 +29,9 @@ public class GameController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Game> getGame(@PathVariable Long id) {
-        return ResponseEntity.ok(gameService.getById(id));
+    public ResponseEntity<GameResponseDetailsDTO> getGame(@PathVariable Long id) {
+        Game game = gameService.getById(id);
+        return ResponseEntity.ok(gameService.mapToDetailsDTO(game));
     }
 
     @GetMapping
@@ -41,7 +43,7 @@ public class GameController {
 
         return ResponseEntity.ok(dtoList);
     }
-    
+
     @PutMapping("/{id}")
     public ResponseEntity<Game> updateGame(@PathVariable Long id, @Valid @RequestBody GameRequestDTO dto) {
         return ResponseEntity.ok(gameService.update(id, dto));
