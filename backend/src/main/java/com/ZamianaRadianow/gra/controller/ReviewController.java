@@ -27,8 +27,9 @@ public class ReviewController {
 
 
     @PostMapping
-    public ResponseEntity<Review> createReview(@Valid @RequestBody ReviewRequestDTO dto) {
-        return new ResponseEntity<>(reviewService.create(dto), HttpStatus.CREATED);
+    public ResponseEntity<ReviewResponseDTO> createReview(@Valid @RequestBody ReviewRequestDTO dto) {
+        Review review = reviewService.create(dto);
+        return new ResponseEntity<>(reviewService.mapToDTO(review), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
@@ -53,8 +54,9 @@ public class ReviewController {
 
 
     @PutMapping("/{id}")
-    public ResponseEntity<Review> updateReview(@PathVariable Long id, @Valid @RequestBody ReviewRequestDTO dto) {
-        return ResponseEntity.ok(reviewService.update(id, dto));
+    public ResponseEntity<ReviewResponseDTO> updateReview(@PathVariable Long id, @Valid @RequestBody ReviewRequestDTO dto) {
+        Review review = reviewService.update(id, dto);
+        return ResponseEntity.ok(reviewService.mapToDTO(review));
     }
 
     @DeleteMapping("/{id}")
