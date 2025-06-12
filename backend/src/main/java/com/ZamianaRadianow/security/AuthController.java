@@ -1,6 +1,8 @@
 package com.ZamianaRadianow.security;
 
 import com.ZamianaRadianow.gra.dto.ReviewRequestDTO;
+import com.ZamianaRadianow.security.dto.AuthenticationRequest;
+import com.ZamianaRadianow.security.dto.AuthenticationResponse;
 import com.ZamianaRadianow.security.dto.RegisterRequestDTO;
 import com.ZamianaRadianow.security.rola.DBRole;
 import com.ZamianaRadianow.security.rola.RoleRepository;
@@ -10,6 +12,11 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,9 +33,29 @@ public class AuthController {
     @Autowired
     private UserRepository userRepository;
 
-    @GetMapping("/login")
-    public ResponseEntity<String> ping() {
-        return ResponseEntity.ok("OK");
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private UserDetailsService userDetailsService;
+
+    @Autowired
+    private JwtUtil jwtUtil;
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody AuthenticationRequest request) {
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
+            );
+
+            final UserDetails userDetails = userDetailsService.loadUserByUsername(request.getUsername());
+            final String jwt = jwtUtil.generateToken(userDetails);
+
+            return ResponseEntity.ok(new AuthenticationResponse(jwt));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
+        }
     }
 
     @PostMapping("/register")
