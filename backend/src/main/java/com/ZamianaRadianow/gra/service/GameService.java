@@ -3,13 +3,13 @@ package com.ZamianaRadianow.gra.service;
 import com.ZamianaRadianow.gra.dto.GameRequestDTO;
 import com.ZamianaRadianow.gra.dto.GameResponseDetailsDTO;
 import com.ZamianaRadianow.gra.dto.GameResponseListDTO;
-import com.ZamianaRadianow.gra.dto.ImageResponseDTO;
 import com.ZamianaRadianow.gra.model.Game;
 import com.ZamianaRadianow.gra.repository.GameRepository;
 import com.ZamianaRadianow.gra.repository.GenreRepository;
 import com.ZamianaRadianow.gra.repository.PlatformRepository;
 import com.ZamianaRadianow.gra.repository.ReviewRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
@@ -87,15 +87,15 @@ public class GameService {
         dto.setPublisher(game.getPublisher());
         dto.setDescription(game.getDescription());
 
-        if (game.getImage() != null) {
-            ImageResponseDTO imageDto = new ImageResponseDTO();
-            imageDto.setId(game.getImage().getId());
-            imageDto.setContentType(game.getImage().getContentType());
-            imageDto.setData(game.getImage().getData());
-            dto.setImage(imageDto);
-        } else {
-            dto.setImage(null);
-        }
+//        if (game.getImage() != null) {
+//            ImageResponseDTO imageDto = new ImageResponseDTO();
+//            imageDto.setId(game.getImage().getId());
+//            imageDto.setContentType(game.getImage().getContentType());
+//            imageDto.setData(game.getImage().getData());
+//            dto.setImage(imageDto);
+//        } else {
+//            dto.setImage(null);
+//        }
 
 
         return dto;
@@ -108,15 +108,15 @@ public class GameService {
         dto.setTitle(game.getTitle());
         dto.setAverageRating(rating);
 
-        if (game.getImage() != null) {
-            ImageResponseDTO imageDto = new ImageResponseDTO();
-            imageDto.setId(game.getImage().getId());
-            imageDto.setContentType(game.getImage().getContentType());
-            imageDto.setData(game.getImage().getData());
-            dto.setImage(imageDto);
-        } else {
-            dto.setImage(null);
-        }
+//        if (game.getImage() != null) {
+//            ImageResponseDTO imageDto = new ImageResponseDTO();
+//            imageDto.setId(game.getImage().getId());
+//            imageDto.setContentType(game.getImage().getContentType());
+//            imageDto.setData(game.getImage().getData());
+//            dto.setImage(imageDto);
+//        } else {
+//            dto.setImage(null);
+//        }
 
 
         return dto;
