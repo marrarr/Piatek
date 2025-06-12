@@ -25,12 +25,13 @@ function Logowanie({ onLoginSuccess }) {
 
       const userData = {
         ...response.data,
-        username: formUsername,
+        username: formUsername, // zakładamy, że login nie przychodzi w response
         roles: Array.isArray(role) ? role : [role], // zabezpieczenie
       };
 
       localStorage.setItem('user', JSON.stringify(userData));
       onLoginSuccess(userData);
+      navigate('/', { replace: true });
 
       // Przekierowanie w zależności od roli
       if (userData.roles.includes('ADMIN')) {

@@ -59,9 +59,7 @@ public class SecurityConfig {
                 //.cors(withDefaults())  // Umożliwia obsługę CORS
                 //.csrf(csrf -> csrf.disable()) // Wyłączanie CSRF dla prostoty, w produkcji powinno być włączone
                 .authorizeHttpRequests(auth -> auth
-                                .requestMatchers("/auth/login").permitAll()
-                                .requestMatchers("/api/**").hasAnyRole("USER", "ADMIN")
-                        .anyRequest().authenticated()
+                                     .anyRequest().permitAll()
                 )
                 .httpBasic(withDefaults()); // Użycie podstawowego uwierzytelniania HTTP
 

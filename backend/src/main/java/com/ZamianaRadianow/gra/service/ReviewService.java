@@ -78,8 +78,8 @@ public class ReviewService {
     public ReviewResponseDTO mapToDTO(Review review) {
         ReviewResponseDTO dto = new ReviewResponseDTO();
         dto.setId(review.getId());
-        dto.setGameId(review.getId());
-        dto.setUserId(review.getId());
+        dto.setGameId(review.getGame().getId());
+        dto.setUserId(review.getUser().getId());
         dto.setRating(review.getRating());
         dto.setReviewText(review.getReviewText());
 

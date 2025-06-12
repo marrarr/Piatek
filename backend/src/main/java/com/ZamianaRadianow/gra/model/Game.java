@@ -54,8 +54,9 @@ public class Game {
     )
     private Set<Platform> platforms = new HashSet<>();
 
-    @OneToOne(mappedBy = "game", cascade = CascadeType.ALL)
-    private Image image;
+    @OneToOne(mappedBy = "game", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+private Image image;
+
 
 
 

@@ -1,6 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 
+/**
+ * GamePage – szczegóły gry + recenzje
+ *
+ * 🔄 Ładuje dwa endpointy:
+ *   1. GET http://localhost:8080/api/games/:id → GameResponseDetailsDTO
+ *   2. GET http://localhost:8080/api/reviews/game/:id → [ReviewResponseDTO]
+ *
+ * ⚙️ Bez żadnych aliasów (@) i bibliotek zewnętrznych – działa w czystym CRA/Vite
+ */
 function GamePage({ user }) {
   const { id } = useParams();
   const [game, setGame] = useState(null);
@@ -72,6 +81,7 @@ function GamePage({ user }) {
       <div className="mb-6 flex flex-col items-center">
         <h1 className="text-4xl font-bold mb-2 text-center break-words">{game.title}</h1>
 
+        {/* Wyświetl okładkę tylko jeśli backend ją zwraca */}
         {game.imageUrl && (
           <img
             src={game.imageUrl}
@@ -118,6 +128,9 @@ function GamePage({ user }) {
                   {review.rating}/10
                 </span>
               </div>
+              <p className="mt-2 text-gray-700 whitespace-pre-wrap">
+                {review.reviewText}
+              </p>
               <p className="mt-2 text-gray-700 whitespace-pre-wrap">{review.reviewText}</p>
 
               {/* Przycisk Usuń widoczny tylko dla admina */}
