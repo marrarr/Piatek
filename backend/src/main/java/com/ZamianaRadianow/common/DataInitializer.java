@@ -21,20 +21,23 @@ import java.util.Set;
 
 @Component
 public class DataInitializer implements CommandLineRunner {
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-    @Autowired
-    private RoleRepository roleRepository;
-    @Autowired
-    private GenreRepository genreRepository;
-    @Autowired
-    private PlatformRepository platformRepository;
-    @Autowired
-    private GameRepository gameRepository;
-    @Autowired
-    private ReviewRepository reviewRepository;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final RoleRepository roleRepository;
+    private final GenreRepository genreRepository;
+    private final PlatformRepository platformRepository;
+    private final GameRepository gameRepository;
+    private final ReviewRepository reviewRepository;
+
+    public DataInitializer(UserRepository userRepository, PasswordEncoder passwordEncoder, RoleRepository roleRepository, GenreRepository genreRepository, PlatformRepository platformRepository, GameRepository gameRepository, ReviewRepository reviewRepository) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.roleRepository = roleRepository;
+        this.genreRepository = genreRepository;
+        this.platformRepository = platformRepository;
+        this.gameRepository = gameRepository;
+        this.reviewRepository = reviewRepository;
+    }
 //    @Autowired
 //    private ImageRepository imageRepository;
 
