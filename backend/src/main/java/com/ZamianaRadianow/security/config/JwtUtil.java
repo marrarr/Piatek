@@ -1,4 +1,4 @@
-package com.ZamianaRadianow.security;
+package com.ZamianaRadianow.security.config;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

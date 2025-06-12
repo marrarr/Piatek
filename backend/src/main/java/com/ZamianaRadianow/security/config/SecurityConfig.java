@@ -1,9 +1,8 @@
-package com.ZamianaRadianow.security;
+package com.ZamianaRadianow.security.config;
 
 import com.ZamianaRadianow.security.rola.DBRole;
 import com.ZamianaRadianow.security.user.DBUser;
 import com.ZamianaRadianow.security.user.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
