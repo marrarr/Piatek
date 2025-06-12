@@ -5,6 +5,7 @@ import com.ZamianaRadianow.security.user.DBUser;
 import com.ZamianaRadianow.security.user.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -79,11 +80,39 @@ public class SecurityConfig {
         http
                 .cors().and().csrf().disable()
                 .authorizeHttpRequests(auth -> auth
+                        // Public endpoints
+                        .requestMatchers(HttpMethod.GET,
+                                "/api/games", "/api/games/**",
+                                "/api/reviews", "/api/reviews/**",
+                                "/api/platforms", "/api/platforms/**",
+                                "/api/genres", "/api/genres/**").permitAll()
                         .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/swagger-ui/**").permitAll()
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
 
+                        // Review endpoints - USER or ADMIN can create/update
+                        .requestMatchers(HttpMethod.POST, "/api/reviews").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/reviews/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/reviews/**").hasRole("ADMIN")
+
+                        // Game endpoints - ADMIN only for write operations
+                        .requestMatchers(HttpMethod.POST, "/api/games").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/games/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/games/**").hasRole("ADMIN")
+
+                        // Platform endpoints - ADMIN only for write operations
+                        .requestMatchers(HttpMethod.POST, "/api/platforms").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/platforms/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/platforms/**").hasRole("ADMIN")
+
+                        // Genre endpoints - ADMIN only for write operations
+                        .requestMatchers(HttpMethod.POST, "/api/genres").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/genres/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/genres/**").hasRole("ADMIN")
+
+                        // Admin endpoints
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
+
+                        // All other requests require authentication
                         .anyRequest().authenticated()
                 )
                 .sessionManagement()
