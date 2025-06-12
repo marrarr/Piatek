@@ -1,5 +1,6 @@
 package com.ZamianaRadianow.security.user;
 
+import com.ZamianaRadianow.gra.model.Review;
 import com.ZamianaRadianow.security.rola.DBRole;
 import jakarta.persistence.*;
 import lombok.*;
@@ -31,7 +32,11 @@ public class DBUser {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<DBRole> roles = new HashSet<>();
 
-//===========================================xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Review> reviews = new ArrayList<>();
+
+
+    //===========================================xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
     public Long getId() {
         return id;
     }
