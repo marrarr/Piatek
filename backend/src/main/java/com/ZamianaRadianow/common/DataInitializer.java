@@ -50,6 +50,10 @@ public class DataInitializer implements CommandLineRunner {
             userDBRole.setName("USER");
             roleRepository.save(userDBRole);
 
+            DBRole blocked = new DBRole();
+            userDBRole.setName("USER_BLOCKED");
+            roleRepository.save(blocked);
+
             // Tworzenie użytkowników
             DBUser admin = new DBUser();
             admin.setUsername("admin");
