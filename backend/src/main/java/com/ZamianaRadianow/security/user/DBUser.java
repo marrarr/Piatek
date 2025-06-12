@@ -31,12 +31,13 @@ public class DBUser {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<DBRole> roles = new HashSet<>();
 
-    public Set<DBRole> getRoles() {
-        return roles;
+//===========================================xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+    public Long getId() {
+        return id;
     }
 
-    public void setRoles(Set<DBRole> roles) {
-        this.roles = roles;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getUsername() {
@@ -47,6 +48,14 @@ public class DBUser {
         this.username = username;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public String getPassword() {
         return password;
     }
@@ -55,11 +64,19 @@ public class DBUser {
         this.password = password;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public Timestamp getCreatedAt() {
+        return createdAt;
     }
 
-    public Long getId() {
-        return id;
+    public void setCreatedAt(Timestamp createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Set<DBRole> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<DBRole> roles) {
+        this.roles = roles;
     }
 }
