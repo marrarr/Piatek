@@ -10,6 +10,7 @@ import com.ZamianaRadianow.gra.repository.GenreRepository;
 import com.ZamianaRadianow.gra.repository.PlatformRepository;
 import com.ZamianaRadianow.gra.repository.ReviewRepository;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -92,6 +93,8 @@ public class GameService {
             imageDto.setContentType(game.getImage().getContentType());
             imageDto.setData(game.getImage().getData());
             dto.setImage(imageDto);
+        } else {
+            dto.setImage(null);
         }
 
 
@@ -111,6 +114,8 @@ public class GameService {
             imageDto.setContentType(game.getImage().getContentType());
             imageDto.setData(game.getImage().getData());
             dto.setImage(imageDto);
+        } else {
+            dto.setImage(null);
         }
 
 

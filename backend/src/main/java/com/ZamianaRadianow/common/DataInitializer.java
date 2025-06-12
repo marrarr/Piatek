@@ -1,15 +1,12 @@
 package com.ZamianaRadianow.common;
 
+
 import com.ZamianaRadianow.gra.model.*;
 import com.ZamianaRadianow.gra.repository.*;
 import com.ZamianaRadianow.security.user.DBUser;
 import com.ZamianaRadianow.security.rola.DBRole;
 import com.ZamianaRadianow.security.rola.RoleRepository;
 import com.ZamianaRadianow.security.user.UserRepository;
-import com.ZamianaRadianow.zamiana.model.Jednostka;
-import com.ZamianaRadianow.zamiana.model.Zamiana;
-import com.ZamianaRadianow.zamiana.ZamianaRepository;
-import com.ZamianaRadianow.zamiana.ZamianaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.io.ClassPathResource;
@@ -30,10 +27,6 @@ public class DataInitializer implements CommandLineRunner {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private RoleRepository roleRepository;
-    @Autowired
-    private ZamianaRepository zamianaRepository;
-    @Autowired
-    private ZamianaService zamianaService;
     @Autowired
     private GenreRepository genreRepository;
     @Autowired
@@ -126,7 +119,7 @@ public class DataInitializer implements CommandLineRunner {
             cyberpunk.setGenres(Set.of(action, rpg));
             cyberpunk.setPlatforms(Set.of(pc, ps5, xbox));
             gameRepository.save(cyberpunk);
-            addImageToGame(cyberpunk, "static/images/eldenring.jpg", "image/jpeg");
+            addImageToGame(cyberpunk, "static/images/zdjecie.jpg", "image/jpeg");
 
             Game zelda = new Game();
             zelda.setTitle("The Legend of Zelda: Breath of the Wild");
@@ -137,7 +130,7 @@ public class DataInitializer implements CommandLineRunner {
             zelda.setGenres(Set.of(adventure, action));
             zelda.setPlatforms(Set.of(switchPlatform));
             gameRepository.save(zelda);
-            addImageToGame(zelda, "static/images/eldenring.jpg", "image/jpeg");
+            addImageToGame(zelda, "static/images/zdjecie.jpg", "image/jpeg");
 
             // Tworzenie recenzji
             Review review1 = new Review();
