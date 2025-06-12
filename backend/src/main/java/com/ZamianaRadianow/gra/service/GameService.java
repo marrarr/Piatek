@@ -87,7 +87,7 @@ public class GameService {
         dto.setDeveloper(game.getDeveloper());
         dto.setPublisher(game.getPublisher());
 
-        // Mapowanie gatunków
+        // Mapowanie gatunkow
         if (game.getGenres() != null) {
             Set<GenreResponseDTO> genreDTOs = game.getGenres().stream()
                     .map(genre -> {
@@ -117,7 +117,7 @@ public class GameService {
     }
 
     public GameResponseListDTO mapToListDTO(Game game) {
-        double rating = reviewRepository.findAverageRatingByGameId(game.getId());
+        double rating = (reviewRepository.findAverageRatingByGameId(game.getId()) == null) ? 0.0 : reviewRepository.findAverageRatingByGameId(game.getId());
         GameResponseListDTO dto = new GameResponseListDTO();
         dto.setId(game.getId());
         dto.setTitle(game.getTitle());

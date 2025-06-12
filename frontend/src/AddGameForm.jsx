@@ -38,7 +38,7 @@ function AddGameForm() {
       platformIds: selectedPlatforms,
     };
 
-    axios.post('/api/games', newGame)
+    axios.post('http://localhost:8080/api/games', newGame)
       .then(res => {
         setMessage('Gra dodana pomyślnie!');
         // wyczyść formularz lub przekieruj gdzieś
