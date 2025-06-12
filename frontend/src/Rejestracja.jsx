@@ -25,8 +25,9 @@ function Rejestracja() {
     try {
       await axios.post('http://localhost:8080/api/auth/register', {
         username,
-        email,
-        password,
+  email,
+  password,
+  secondPassword: passwordRepeat,
       });
 
       // Jeśli rejestracja się powiodła:
