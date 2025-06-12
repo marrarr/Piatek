@@ -3,42 +3,67 @@ import axios from 'axios';
 
 function UserList() {
   const [users, setUsers] = useState([]);
+  const [error, setError] = useState(null);
+
+  const token = (() => {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      try {
+        return JSON.parse(storedUser).token;
+      } catch {
+        return null;
+      }
+    }
+    return null;
+  })();
 
   useEffect(() => {
-    axios.get('http://localhost:8080/api/admin/users')
-      .then(res => setUsers(res.data))
-      .catch(err => console.error('Błąd podczas pobierania użytkowników', err));
-  }, []);
+    if (!token) {
+      setError('Brak tokenu autoryzacji. Zaloguj się ponownie.');
+      return;
+    }
+
+    axios.get('http://localhost:8080/api/admin/users', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+    })
+      .then(res => {
+        setUsers(res.data);
+        setError(null);
+      })
+      .catch(err => {
+        console.error('Błąd podczas pobierania użytkowników', err);
+        setError('Nie udało się pobrać użytkowników. Sprawdź uprawnienia.');
+      });
+  }, [token]);
 
   const handleDelete = (userId) => {
-    axios.delete(`http://localhost:8080/api/admin/users/${userId}`)
+    if (!token) {
+      setError('Brak tokenu autoryzacji. Zaloguj się ponownie.');
+      return;
+    }
+
+    axios.delete(`http://localhost:8080/api/admin/users/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+    })
       .then(() => setUsers(users.filter(user => user.id !== userId)))
-      .catch(err => console.error('Błąd podczas usuwania użytkownika', err));
+      .catch(err => {
+        console.error('Błąd podczas usuwania użytkownika', err);
+        setError('Nie udało się usunąć użytkownika.');
+      });
   };
 
-  const handleBlock = (userId) => {
-    axios.patch(`http://localhost:8080/api/admin/users/${userId}/block`)
-      .then(() => {
-        setUsers(prevUsers =>
-          prevUsers.map(user =>
-            user.id === userId ? { ...user, blocked: true } : user
-          )
-        );
-      })
-      .catch(err => console.error('Błąd podczas blokowania użytkownika', err));
-  };
-
-  const handleUnblock = (userId) => {
-    axios.patch(`http://localhost:8080/api/admin/users/${userId}/unblock`)
-      .then(() => {
-        setUsers(prevUsers =>
-          prevUsers.map(user =>
-            user.id === userId ? { ...user, blocked: false } : user
-          )
-        );
-      })
-      .catch(err => console.error('Błąd podczas odblokowywania użytkownika', err));
-  };
+  if (error) {
+    return (
+      <div className="container mx-auto p-6">
+        <h2 className="text-2xl font-bold mb-4 text-red-600">Błąd</h2>
+        <p>{error}</p>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto p-6">
@@ -49,30 +74,12 @@ function UserList() {
             <span>{user.username}</span>
             <div className="space-x-2">
               {user.username !== 'admin' && (
-                <>
-                  <button
-                    onClick={() => handleDelete(user.id)}
-                    className="bg-red-500 text-white px-3 py-1 rounded"
-                  >
-                    Usuń
-                  </button>
-
-                  {!user.blocked ? (
-                    <button
-                      onClick={() => handleBlock(user.id)}
-                      className="bg-yellow-500 text-white px-3 py-1 rounded"
-                    >
-                      Blokuj
-                    </button>
-                  ) : (
-                    <button
-                      onClick={() => handleUnblock(user.id)}
-                      className="bg-green-600 text-white px-3 py-1 rounded"
-                    >
-                      Odblokuj
-                    </button>
-                  )}
-                </>
+                <button
+                  onClick={() => handleDelete(user.id)}
+                  className="bg-red-500 text-white px-3 py-1 rounded"
+                >
+                  Usuń
+                </button>
               )}
             </div>
           </li>

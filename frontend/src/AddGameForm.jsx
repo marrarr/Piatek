@@ -7,27 +7,59 @@ function AddGameForm() {
   const [developer, setDeveloper] = useState('');
   const [publisher, setPublisher] = useState('');
   const [description, setDescription] = useState('');
-  const [genres, setGenres] = useState([]);       // Wszystkie dostępne gatunki do wyboru
-  const [platforms, setPlatforms] = useState([]); // Wszystkie platformy do wyboru
+  const [genres, setGenres] = useState([]);
+  const [platforms, setPlatforms] = useState([]);
   const [selectedGenres, setSelectedGenres] = useState([]);
   const [selectedPlatforms, setSelectedPlatforms] = useState([]);
   const [message, setMessage] = useState('');
+  const [error, setError] = useState(null);
 
-  // Pobierz listę gatunków i platform z backendu przy załadowaniu formularza
+  // Pobierz token JWT z localStorage
+  const token = (() => {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      try {
+        return JSON.parse(storedUser).token;
+      } catch {
+        return null;
+      }
+    }
+    return null;
+  })();
+
   useEffect(() => {
-    axios.get('http://localhost:8080/api/genres')
-      .then(res => setGenres(res.data))
-      .catch(err => console.error(err));
+    if (!token) {
+      setError('Brak tokenu autoryzacji. Zaloguj się ponownie.');
+      return;
+    }
 
-    axios.get('http://localhost:8080/api/platforms')
+    axios.get('http://localhost:8080/api/genres', {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+      .then(res => setGenres(res.data))
+      .catch(err => {
+        console.error(err);
+        setError('Nie udało się pobrać gatunków.');
+      });
+
+    axios.get('http://localhost:8080/api/platforms', {
+      headers: { Authorization: `Bearer ${token}` }
+    })
       .then(res => setPlatforms(res.data))
-      .catch(err => console.error(err));
-  }, []);
+      .catch(err => {
+        console.error(err);
+        setError('Nie udało się pobrać platform.');
+      });
+  }, [token]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Przygotuj obiekt do wysłania na backend
+    if (!token) {
+      setError('Brak tokenu autoryzacji. Zaloguj się ponownie.');
+      return;
+    }
+
     const newGame = {
       title,
       releaseDate: releaseDate ? new Date(releaseDate).toISOString() : null,
@@ -38,10 +70,12 @@ function AddGameForm() {
       platformIds: selectedPlatforms,
     };
 
-    axios.post('http://localhost:8080/api/games', newGame)
-      .then(res => {
+    axios.post('http://localhost:8080/api/games', newGame, {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+      .then(() => {
         setMessage('Gra dodana pomyślnie!');
-        // wyczyść formularz lub przekieruj gdzieś
+        setError(null);
         setTitle('');
         setReleaseDate('');
         setDeveloper('');
@@ -51,29 +85,39 @@ function AddGameForm() {
         setSelectedPlatforms([]);
       })
       .catch(err => {
-        setMessage('Wystąpił błąd podczas dodawania gry.');
         console.error(err);
+        setError('Wystąpił błąd podczas dodawania gry.');
+        setMessage('');
       });
   };
 
   // Obsługa checkboxów gatunków
   const handleGenreChange = (id) => {
-    setSelectedGenres(prev => 
+    setSelectedGenres(prev =>
       prev.includes(id) ? prev.filter(g => g !== id) : [...prev, id]
     );
   };
 
   // Obsługa checkboxów platform
   const handlePlatformChange = (id) => {
-    setSelectedPlatforms(prev => 
+    setSelectedPlatforms(prev =>
       prev.includes(id) ? prev.filter(p => p !== id) : [...prev, id]
     );
   };
 
+  if (error) {
+    return (
+      <div className="max-w-xl mx-auto p-4">
+        <h2 className="text-2xl font-bold mb-4 text-red-600">Błąd</h2>
+        <p>{error}</p>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-xl mx-auto p-4">
       <h2 className="text-2xl font-bold mb-4">Dodaj nową grę</h2>
-      {message && <p className="mb-4">{message}</p>}
+      {message && <p className="mb-4 text-green-600">{message}</p>}
       <form onSubmit={handleSubmit}>
         <label className="block mb-2">
           Tytuł:

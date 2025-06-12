@@ -1,21 +1,43 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-function EditGameForm() {
+function EditGameForm({ user }) {
   const { id } = useParams();
   const navigate = useNavigate();
   const [game, setGame] = useState(null);
   const [error, setError] = useState(null);
 
+  // Pobierz token JWT z usera (props lub localStorage jako fallback)
+  const token = user?.token || (() => {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      try {
+        return JSON.parse(storedUser).token;
+      } catch {
+        return null;
+      }
+    }
+    return null;
+  })();
+
   useEffect(() => {
-    fetch(`http://localhost:8080/api/games/${id}`)
+    if (!token) {
+      setError('Brak autoryzacji. Zaloguj się ponownie.');
+      return;
+    }
+
+    fetch(`http://localhost:8080/api/games/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
       .then((res) => {
         if (!res.ok) throw new Error('Nie udało się pobrać danych gry');
         return res.json();
       })
       .then((data) => setGame(data))
       .catch((err) => setError(err.message));
-  }, [id]);
+  }, [id, token]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -24,13 +46,20 @@ function EditGameForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!token) {
+      setError('Brak autoryzacji. Zaloguj się ponownie.');
+      return;
+    }
+
     try {
       const res = await fetch(`http://localhost:8080/api/games/${id}`, {
         method: 'PUT',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(game)
+        body: JSON.stringify(game),
       });
 
       if (!res.ok) throw new Error('Błąd podczas zapisu danych');

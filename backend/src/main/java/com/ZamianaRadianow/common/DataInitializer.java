@@ -21,22 +21,23 @@ import java.util.Set;
 
 @Component
 public class DataInitializer implements CommandLineRunner {
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-    @Autowired
-    private RoleRepository roleRepository;
-    @Autowired
-    private GenreRepository genreRepository;
-    @Autowired
-    private PlatformRepository platformRepository;
-    @Autowired
-    private GameRepository gameRepository;
-    @Autowired
-    private ReviewRepository reviewRepository;
-//    @Autowired
-//    private ImageRepository imageRepository;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final RoleRepository roleRepository;
+    private final GenreRepository genreRepository;
+    private final PlatformRepository platformRepository;
+    private final GameRepository gameRepository;
+    private final ReviewRepository reviewRepository;
+
+    public DataInitializer(UserRepository userRepository, PasswordEncoder passwordEncoder, RoleRepository roleRepository, GenreRepository genreRepository, PlatformRepository platformRepository, GameRepository gameRepository, ReviewRepository reviewRepository) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.roleRepository = roleRepository;
+        this.genreRepository = genreRepository;
+        this.platformRepository = platformRepository;
+        this.gameRepository = gameRepository;
+        this.reviewRepository = reviewRepository;
+    }
 
     @Override
     public void run(String... args) throws Exception {
@@ -111,7 +112,6 @@ public class DataInitializer implements CommandLineRunner {
             eldenRing.setGenres(Set.of(action, rpg));
             eldenRing.setPlatforms(Set.of(pc, ps5, xbox));
             gameRepository.save(eldenRing);
-//            addImageToGame(eldenRing, "static/images/zdjecie.jpg", "image/jpeg");
 
 
             Game cyberpunk = new Game();
@@ -123,7 +123,6 @@ public class DataInitializer implements CommandLineRunner {
             cyberpunk.setGenres(Set.of(action, rpg));
             cyberpunk.setPlatforms(Set.of(pc, ps5, xbox));
             gameRepository.save(cyberpunk);
-//            addImageToGame(cyberpunk, "static/images/zdjecie.jpg", "image/jpeg");
 
             Game zelda = new Game();
             zelda.setTitle("The Legend of Zelda: Breath of the Wild");
@@ -134,7 +133,6 @@ public class DataInitializer implements CommandLineRunner {
             zelda.setGenres(Set.of(adventure, action));
             zelda.setPlatforms(Set.of(switchPlatform));
             gameRepository.save(zelda);
-//            addImageToGame(zelda, "static/images/zdjecie.jpg", "image/jpeg");
 
             // Tworzenie recenzji
             Review review1 = new Review();
@@ -173,25 +171,5 @@ public class DataInitializer implements CommandLineRunner {
             System.out.println("Initial data loaded successfully!");
             System.out.println("=========================");
         }
-
-
     }
-
-//    private void addImageToGame(Game game, String path, String contentType) {
-//        try {
-//            ClassPathResource imgFile = new ClassPathResource(path);
-//            byte[] imageData = Files.readAllBytes(imgFile.getFile().toPath());
-//
-//            Image image = new Image();
-//            image.setData(imageData);
-//            image.setContentType(contentType);
-//            image.setGame(game);
-//
-//            imageRepository.save(image);
-//        } catch (IOException e) {
-//            System.err.println("Nie udało się załadować zdjęcia: " + path);
-//            e.printStackTrace();
-//        }
-//    }
-
 }

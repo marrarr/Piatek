@@ -13,25 +13,30 @@ function Logowanie({ onLoginSuccess }) {
     setLoading(true);
 
     try {
-      const response = await axios.get('http://localhost:8080/api/auth/login', {
-        auth: {
-          username: formUsername,
-          password: formPassword,
-        },
+      const response = await axios.post('http://localhost:8080/api/auth/login', {
+        username: formUsername,
+        password: formPassword,
       });
+
+      // Załóżmy, że token JWT jest w response.data.token
+      const token = response.data.token;
 
       // Zakładamy, że serwer zwraca role jako role lub roles
       const role = response.data.role || response.data.roles || [];
 
       const userData = {
         ...response.data,
-        username: formUsername, // zakładamy, że login nie przychodzi w response
+        id: response.data.id,
+        username: formUsername,  // jeśli login nie przychodzi w response
         roles: Array.isArray(role) ? role : [role], // zabezpieczenie
+        token, // dodajemy token do userData
       };
 
+      // Zapisujemy user i token osobno (przyda się do nagłówków auth)
       localStorage.setItem('user', JSON.stringify(userData));
+      localStorage.setItem('token', token);
+
       onLoginSuccess(userData);
-      navigate('/', { replace: true });
 
       // Przekierowanie w zależności od roli
       if (userData.roles.includes('ADMIN')) {
@@ -39,7 +44,6 @@ function Logowanie({ onLoginSuccess }) {
       } else {
         navigate('/', { replace: true });
       }
-
     } catch (error) {
       console.error('Błąd logowania:', error);
       alert('Niepoprawny login lub hasło');
@@ -86,4 +90,4 @@ function Logowanie({ onLoginSuccess }) {
   );
 }
 
-export default Logowanie; 
+export default Logowanie;

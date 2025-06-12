@@ -47,39 +47,53 @@ function GamePage({ user }) {
   }, [id]);
 
   const handleDeleteReview = async (reviewId) => {
-    if (!window.confirm('Czy na pewno chcesz usunąć tę recenzję?')) return;
+  if (!window.confirm('Czy na pewno chcesz usunąć tę recenzję?')) return;
 
-    try {
-      const res = await fetch(`http://localhost:8080/api/reviews/${reviewId}`, {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-      });
-
-      if (!res.ok) throw new Error('Nie udało się usunąć recenzji');
-
-      setReviews((prev) => prev.filter((r) => r.id !== reviewId));
-    } catch (err) {
-      alert(err.message);
-    }
-  };
-
-  const handleDeleteGame = async () => {
-  if (!window.confirm('Czy na pewno chcesz usunąć tę grę?')) return;
+  const token = localStorage.getItem('token');
 
   try {
-    const res = await fetch(`http://localhost:8080/api/games/${id}`, {
+    const res = await fetch(`http://localhost:8080/api/reviews/${reviewId}`, {
       method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
     });
 
-    if (!res.ok) throw new Error('Nie udało się usunąć gry');
-
-    alert('Gra została usunięta.');
-    navigate('/'); // lub np. navigate('/games');
+    if (!res.ok) throw new Error('Nie udało się usunąć recenzji');
+    setReviews((prev) => prev.filter((r) => r.id !== reviewId));
   } catch (err) {
     alert(err.message);
   }
 };
+
+
+  const handleDeleteGame = async () => {
+  if (!window.confirm('Czy na pewno chcesz usunąć tę grę?')) return;
+
+  const token = localStorage.getItem('token');
+
+  try {
+    const res = await fetch(`http://localhost:8080/api/games/${id}`, {  // <-- używamy id, nie gameId
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!res.ok) {
+      const errorText = await res.text();
+      throw new Error(`Błąd: ${res.status} – ${errorText}`);
+    }
+
+    navigate('/');
+  } catch (err) {
+    alert(`Nie udało się usunąć gry: ${err.message}`);
+  }
+};
+
+
 
 
   if (loading) return <p className="text-center text-gray-600 mt-8">Ładowanie...</p>;

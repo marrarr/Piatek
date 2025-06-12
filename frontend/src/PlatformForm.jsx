@@ -5,15 +5,43 @@ function PlatformForm({ onAdded }) {
   const [name, setName] = useState('');
   const [error, setError] = useState(null);
 
+  // Pobierz token JWT z localStorage
+  const token = (() => {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      try {
+        return JSON.parse(storedUser).token;
+      } catch {
+        return null;
+      }
+    }
+    return null;
+  })();
+
   const handleSubmit = async e => {
     e.preventDefault();
+
+    if (!token) {
+      setError('Brak tokenu autoryzacji. Zaloguj się ponownie.');
+      return;
+    }
+
     try {
-      const response = await axios.post('http://localhost:8080/api/platforms', { name });
+      const response = await axios.post(
+        'http://localhost:8080/api/platforms',
+        { name },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
       setName('');
       setError(null);
       if (onAdded) onAdded(response.data);
     } catch (err) {
       setError('Błąd podczas dodawania platformy');
+      console.error(err);
     }
   };
 
