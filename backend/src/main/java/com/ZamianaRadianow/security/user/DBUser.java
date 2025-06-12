@@ -1,7 +1,6 @@
 package com.ZamianaRadianow.security.user;
 
 import com.ZamianaRadianow.security.rola.DBRole;
-import com.ZamianaRadianow.zamiana.model.Zamiana;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -31,9 +30,6 @@ public class DBUser {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<DBRole> roles = new HashSet<>();
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Zamiana> zamiany = new ArrayList<>();
 
     public Set<DBRole> getRoles() {
         return roles;
