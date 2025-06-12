@@ -20,14 +20,24 @@ function Logowanie({ onLoginSuccess }) {
         },
       });
 
+      // Zakładamy, że serwer zwraca role jako `role` lub `roles`
+      const role = response.data.role || response.data.roles || [];
+
       const userData = {
         ...response.data,
-        username: formUsername, // zakładamy, że login nie przychodzi w response
+        username: formUsername,
+        roles: Array.isArray(role) ? role : [role], // zabezpieczenie
       };
 
       localStorage.setItem('user', JSON.stringify(userData));
       onLoginSuccess(userData);
-      navigate('/', { replace: true });
+
+      // Przekierowanie w zależności od roli
+      if (userData.roles.includes('ADMIN')) {
+        navigate('/admin', { replace: true });
+      } else {
+        navigate('/', { replace: true });
+      }
 
     } catch (error) {
       console.error('Błąd logowania:', error);
