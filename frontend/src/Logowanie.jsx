@@ -20,7 +20,7 @@ function Logowanie({ onLoginSuccess }) {
         },
       });
 
-      // Zakładamy, że serwer zwraca role jako `role` lub `roles`
+      // Zakładamy, że serwer zwraca role jako role lub roles
       const role = response.data.role || response.data.roles || [];
 
       const userData = {
@@ -86,4 +86,4 @@ function Logowanie({ onLoginSuccess }) {
   );
 }
 
-export default Logowanie;
+export default Logowanie; 

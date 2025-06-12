@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+
 
 function GamePage({ user }) {
   const { id } = useParams();
@@ -7,6 +9,8 @@ function GamePage({ user }) {
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -58,6 +62,25 @@ function GamePage({ user }) {
       alert(err.message);
     }
   };
+
+  const handleDeleteGame = async () => {
+  if (!window.confirm('Czy na pewno chcesz usunąć tę grę?')) return;
+
+  try {
+    const res = await fetch(`http://localhost:8080/api/games/${id}`, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+    });
+
+    if (!res.ok) throw new Error('Nie udało się usunąć gry');
+
+    alert('Gra została usunięta.');
+    navigate('/'); // lub np. navigate('/games');
+  } catch (err) {
+    alert(err.message);
+  }
+};
+
 
   if (loading) return <p className="text-center text-gray-600 mt-8">Ładowanie...</p>;
   if (error) return <p className="text-center text-red-600 mt-8">Błąd: {error}</p>;
@@ -128,13 +151,22 @@ function GamePage({ user }) {
         )}
 
         {user?.username === 'admin' && (
-          <Link
-            to={`/game/${id}/edit`}
-            className="mt-2 inline-block bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 px-4 rounded-xl transition-colors"
-          >
-            Edytuj grę
-          </Link>
-        )}
+  <>
+    <Link
+      to={`/game/${id}/edit`}
+      className="mt-2 inline-block bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 px-4 rounded-xl transition-colors"
+    >
+      Edytuj grę
+    </Link>
+    <button
+      onClick={handleDeleteGame}
+      className="mt-2 ml-2 inline-block bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-xl transition-colors"
+    >
+      Usuń grę
+    </button>
+  </>
+)}
+
 
       </div>
 
