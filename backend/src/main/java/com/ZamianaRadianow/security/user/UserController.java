@@ -29,7 +29,7 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-    @GetMapping
+    @GetMapping("/users")
     public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
         List<DBUser> users = userRepository.findAll();
         List<UserResponseDTO> dtoList = new ArrayList<>();
@@ -44,7 +44,7 @@ public class UserController {
     }
 
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/users/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         DBUser user = userRepository.findById(id).orElse(null);
 
