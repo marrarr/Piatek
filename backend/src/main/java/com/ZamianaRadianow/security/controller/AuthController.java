@@ -52,7 +52,13 @@ public class AuthController {
             final UserDetails userDetails = userDetailsService.loadUserByUsername(request.getUsername());
             final String jwt = jwtUtil.generateToken(userDetails);
 
-            return ResponseEntity.ok(new AuthenticationResponse(jwt));
+
+            //
+            DBUser user = userRepository.findByUsername(userDetails.getUsername());
+            Long id = user.getId();
+            //
+
+            return ResponseEntity.ok(new AuthenticationResponse(jwt, id));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
         }

@@ -38,4 +38,3 @@ public class ReviewRequestDTO {
         this.reviewText = reviewText;
     }
 }
-
