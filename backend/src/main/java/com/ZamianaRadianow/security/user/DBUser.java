@@ -56,7 +56,7 @@ public class DBUser {
     }
 
     public void setId(Long id) {
-        this.id=id;
+        this.id = id;
     }
 
     public Long getId() {
