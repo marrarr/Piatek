@@ -22,12 +22,15 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/admin")
 public class UserController {
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private RoleRepository roleRepository;
 
     @GetMapping("/users")
     public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
@@ -47,6 +50,12 @@ public class UserController {
     @DeleteMapping("/users/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         DBUser user = userRepository.findById(id).orElse(null);
+        DBRole rolaAdmin = roleRepository.findByName("ADMIN");
+        Set<DBRole> roles = user.getRoles();
+        if (rolaAdmin != null && roles.contains(rolaAdmin)) {
+            // TODO nie mozna usunac admina
+            return ResponseEntity.noContent().build();
+        }
 
         if (user != null) {
             userRepository.delete(user);
