@@ -5,10 +5,5 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
-    @Autowired
-    UserRepository userRepository;
 
-    public register(RegisterRequestDTO dto) {
-
-    }
 }
