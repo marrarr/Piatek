@@ -1,15 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 
-/**
- * GamePage – szczegóły gry + recenzje
- *
- * 🔄 Ładuje dwa endpointy:
- *   1. GET http://localhost:8080/api/games/:id → GameResponseDetailsDTO
- *   2. GET http://localhost:8080/api/reviews/game/:id → [ReviewResponseDTO]
- *
- * ⚙️ Bez żadnych aliasów (@) i bibliotek zewnętrznych – działa w czystym CRA/Vite
- */
 function GamePage({ user }) {
   const { id } = useParams();
   const [game, setGame] = useState(null);
@@ -43,6 +34,30 @@ function GamePage({ user }) {
     fetchData();
   }, [id]);
 
+  // Funkcja usuwająca recenzję - dostępna tylko dla admina
+  const handleDeleteReview = async (reviewId) => {
+    if (!window.confirm('Czy na pewno chcesz usunąć tę recenzję?')) return;
+
+    try {
+      const res = await fetch(`http://localhost:8080/api/reviews/${reviewId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          // Możesz dodać nagłówki autoryzacyjne jeśli wymagane, np. token
+        },
+      });
+
+      if (!res.ok) {
+        throw new Error('Nie udało się usunąć recenzji');
+      }
+
+      // Usuń recenzję z lokalnego stanu, by odświeżyć listę
+      setReviews((prev) => prev.filter((r) => r.id !== reviewId));
+    } catch (err) {
+      alert(err.message);
+    }
+  };
+
   if (loading) {
     return <p className="text-center text-gray-600 mt-8">Ładowanie...</p>;
   }
@@ -57,7 +72,6 @@ function GamePage({ user }) {
       <div className="mb-6 flex flex-col items-center">
         <h1 className="text-4xl font-bold mb-2 text-center break-words">{game.title}</h1>
 
-        {/* Wyświetl okładkę tylko jeśli backend ją zwraca */}
         {game.imageUrl && (
           <img
             src={game.imageUrl}
@@ -104,9 +118,17 @@ function GamePage({ user }) {
                   {review.rating}/10
                 </span>
               </div>
-              <p className="mt-2 text-gray-700 whitespace-pre-wrap">
-                {review.reviewText}
-              </p>
+              <p className="mt-2 text-gray-700 whitespace-pre-wrap">{review.reviewText}</p>
+
+              {/* Przycisk Usuń widoczny tylko dla admina */}
+              {user?.username === 'admin' && (
+                <button
+                  onClick={() => handleDeleteReview(review.id)}
+                  className="mt-2 text-red-600 hover:text-red-800 font-semibold"
+                >
+                  Usuń
+                </button>
+              )}
             </div>
           ))}
         </div>
