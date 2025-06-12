@@ -1,8 +1,6 @@
 package com.ZamianaRadianow.gra.service;
 
-import com.ZamianaRadianow.gra.dto.GameRequestDTO;
-import com.ZamianaRadianow.gra.dto.GameResponseDetailsDTO;
-import com.ZamianaRadianow.gra.dto.GameResponseListDTO;
+import com.ZamianaRadianow.gra.dto.*;
 import com.ZamianaRadianow.gra.model.Game;
 import com.ZamianaRadianow.gra.repository.GameRepository;
 import com.ZamianaRadianow.gra.repository.GenreRepository;
@@ -15,6 +13,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class GameService {
@@ -76,7 +76,8 @@ public class GameService {
     }
 
     public GameResponseDetailsDTO mapToDetailsDTO(Game game) {
-        double rating = reviewRepository.findAverageRatingByGameId(game.getId());
+        double rating = (reviewRepository.findAverageRatingByGameId(game.getId()) == null) ? 0.0 : reviewRepository.findAverageRatingByGameId(game.getId());
+
         GameResponseDetailsDTO dto = new GameResponseDetailsDTO();
         dto.setId(game.getId());
         dto.setTitle(game.getTitle());
@@ -85,24 +86,38 @@ public class GameService {
         dto.setReleaseDate(game.getReleaseDate());
         dto.setDeveloper(game.getDeveloper());
         dto.setPublisher(game.getPublisher());
-        dto.setDescription(game.getDescription());
 
-//        if (game.getImage() != null) {
-//            ImageResponseDTO imageDto = new ImageResponseDTO();
-//            imageDto.setId(game.getImage().getId());
-//            imageDto.setContentType(game.getImage().getContentType());
-//            imageDto.setData(game.getImage().getData());
-//            dto.setImage(imageDto);
-//        } else {
-//            dto.setImage(null);
-//        }
+        // Mapowanie gatunkÃ³w
+        if (game.getGenres() != null) {
+            Set<GenreResponseDTO> genreDTOs = game.getGenres().stream()
+                    .map(genre -> {
+                        GenreResponseDTO genreDTO = new GenreResponseDTO();
+                        genreDTO.setId(genre.getId());
+                        genreDTO.setName(genre.getName());
+                        return genreDTO;
+                    })
+                    .collect(Collectors.toSet());
+            dto.setGenres(genreDTOs);
+        }
 
+        // Mapowanie platform
+        if (game.getPlatforms() != null) {
+            Set<PlatformResponseDTO> platformDTOs = game.getPlatforms().stream()
+                    .map(platform -> {
+                        PlatformResponseDTO platformDTO = new PlatformResponseDTO();
+                        platformDTO.setId(platform.getId());
+                        platformDTO.setName(platform.getName());
+                        return platformDTO;
+                    })
+                    .collect(Collectors.toSet());
+            dto.setPlatforms(platformDTOs);
+        }
 
         return dto;
     }
 
     public GameResponseListDTO mapToListDTO(Game game) {
-        double rating = reviewRepository.findAverageRatingByGameId(game.getId());
+        double rating = (reviewRepository.findAverageRatingByGameId(game.getId()) == null) ? 0.0 : reviewRepository.findAverageRatingByGameId(game.getId());
         GameResponseListDTO dto = new GameResponseListDTO();
         dto.setId(game.getId());
         dto.setTitle(game.getTitle());

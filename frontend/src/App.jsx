@@ -13,6 +13,7 @@ import GenreForm from './GenreForm.jsx';
 import PlatformForm from './PlatformForm.jsx';
 import GenreList from './GenreList.jsx';
 import PlatformList from './PlatformList.jsx';
+import EditGameForm from './EditGameForm';
 
 // Komponent zabezpieczający dostęp tylko dla admina
 const RequireAdmin = ({ user, children }) => {
@@ -122,6 +123,7 @@ function App() {
 
         {/* Catch-all */}
         <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="/game/:id/edit" element={<EditGameForm />} />
       </Routes>
     </BrowserRouter>
   );
